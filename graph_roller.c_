@@ -1,0 +1,102 @@
+/*******************************************************************************************
+*
+*   GraphRoller v1.1.0 - small tool for constructing graphs
+*
+*   LICENSE: Propietary License
+*
+*   Copyright (c) 2022 pencelheimer. All Rights Reserved.
+*
+*   Unauthorized copying of this file, via any medium is strictly prohibited
+*   This project is proprietary and confidential unless the owner allows
+*   usage in any other form by expresely written permission.
+*
+**********************************************************************************************/
+
+#include "raylib.h"
+
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
+//----------------------------------------------------------------------------------
+// Controls Functions Declaration
+//----------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------------
+// Program main entry point
+//------------------------------------------------------------------------------------
+int main()
+{
+    // Initialization
+    //---------------------------------------------------------------------------------------
+    int screenWidth = 800;
+    int screenHeight = 450;
+
+    InitWindow(screenWidth, screenHeight, "graph_roller");
+
+    // graph_roller: controls initialization
+    //----------------------------------------------------------------------------------
+    Rectangle nodes_scroll_panelScrollView = { 0, 0, 0, 0 };
+    Vector2 nodes_scroll_panelScrollOffset = { 0, 0 };
+    Vector2 nodes_scroll_panelBoundsOffset = { 0, 0 };
+    Rectangle temp_scroll_panelScrollView = { 0, 0, 0, 0 };
+    Vector2 temp_scroll_panelScrollOffset = { 0, 0 };
+    Vector2 temp_scroll_panelBoundsOffset = { 0, 0 };
+    bool close_uttonPressed = false;
+    int instrument_toggle_groupActive = 0;
+
+    Rectangle layoutRecs[7] = {
+        (Rectangle){ 0, 0, 1280, 720 },
+        (Rectangle){ 0, 24, 264, 336 },
+        (Rectangle){ 0, 360, 264, 360 },
+        (Rectangle){ 264, 24, 1016, 696 },
+        (Rectangle){ 264, 680, 1016, 40 },
+        (Rectangle){ 1256, 0, 24, 24 },
+        (Rectangle){ 272, 688, 40, 24 },
+    };
+    //----------------------------------------------------------------------------------
+
+    SetTargetFPS(60);
+    //--------------------------------------------------------------------------------------
+
+    // Main game loop
+    while (!WindowShouldClose())    // Detect window close button or ESC key
+    {
+        // Update
+        //----------------------------------------------------------------------------------
+        // TODO: Implement required update logic
+        //----------------------------------------------------------------------------------
+
+        // Draw
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+            ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR))); 
+
+            // raygui: controls drawing
+            //----------------------------------------------------------------------------------
+            GuiGroupBox(layoutRecs[0], "Graph Roller");
+            GuiScrollPanel((Rectangle){layoutRecs[1].x, layoutRecs[1].y, layoutRecs[1].width - nodes_scroll_panelBoundsOffset.x, layoutRecs[1].height - nodes_scroll_panelBoundsOffset.y }, NULL, layoutRecs[1], &nodes_scroll_panelScrollOffset, &nodes_scroll_panelScrollView);
+            GuiScrollPanel((Rectangle){layoutRecs[2].x, layoutRecs[2].y, layoutRecs[2].width - temp_scroll_panelBoundsOffset.x, layoutRecs[2].height - temp_scroll_panelBoundsOffset.y }, NULL, layoutRecs[2], &temp_scroll_panelScrollOffset, &temp_scroll_panelScrollView);
+            GuiGroupBox(layoutRecs[3], "Graph Field");
+            GuiGroupBox(layoutRecs[4], "Controls");
+            close_uttonPressed = GuiButton(layoutRecs[5], "X"); 
+            GuiToggleGroup(layoutRecs[6], "+;-;E", &instrument_toggle_groupActive);
+            //----------------------------------------------------------------------------------
+
+        EndDrawing();
+        //----------------------------------------------------------------------------------
+    }
+
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    CloseWindow();        // Close window and OpenGL context
+    //--------------------------------------------------------------------------------------
+
+    return 0;
+}
+
+//------------------------------------------------------------------------------------
+// Controls Functions Definitions (local)
+//------------------------------------------------------------------------------------
+
